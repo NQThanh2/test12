@@ -8,18 +8,19 @@ pipeline {
             }
         }
         // Bo qua stage Build & Test vi Docker se lam thay
-        stage('Dockerize & Deploy') {
-            steps {
-                echo '🐳 Buoc 1: Dong goi Docker Image...'
-                sh 'docker build -t doan-cnpm .'
+       stage('Dockerize & Deploy') {
+    steps {
+        echo '🐳 Buoc 1: Dong goi Docker Image...'
+        // Thêm --no-cache để đảm bảo build mới hoàn toàn, tránh lỗi rác
+        sh 'docker build --no-cache -t doan-cnpm .'
 
-                echo '🛑 Buoc 2: Don dep Container cu...'
-                sh 'docker rm -f web-app-demo || true'
+        echo '🛑 Buoc 2: Don dep Container cu...'
+        sh 'docker rm -f web-app-demo || true'
 
-                echo '🚀 Buoc 3: Khoi chay ung dung...'
-                sh 'docker run -d --name web-app-demo -p 3000:3000 doan-cnpm'
-            }
-        }
+        echo '🚀 Buoc 3: Khoi chay ung dung...'
+        sh 'docker run -d --name web-app-demo -p 3000:3000 doan-cnpm'
+    }
+}
     }
     post {
         success {
