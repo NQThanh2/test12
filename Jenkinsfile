@@ -31,11 +31,13 @@ pipeline {
     }
 }
         stage('Deploy') {
-            steps {
-                echo '🚀 Đang Deploy lên Server thực tế...'
-                // sh 'docker-compose up -d'
-            }
-        }
+    steps {
+        echo '🚀 Đang Deploy lên Server thực tế...'
+        // Xóa container cũ nếu đang chạy để tránh trùng tên, sau đó chạy cái mới
+        sh 'docker rm -f web-demo || true'
+        sh 'docker run -d --name web-demo -p 3000:3000 my-web-app:v1'
+    }
+}
     }
     
     post {
