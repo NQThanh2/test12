@@ -10,7 +10,7 @@ app.get("/", (req, res) => {
         <p>Trạng thái: <span style="color: green; font-weight: bold;">Đã Deploy Thành Công!</span></p>
         <div style="border: 2px dashed #3498db; display: inline-block; padding: 20px;">
           <p>Dự án: Tìm hiểu Jenkins & Docker</p>
-          <p>Version: 1.0.20</p>
+          <p>Version: 1.0.45</p>
         </div>
         <br><br>
         <p><i>Cập nhật lần cuối: ${new Date().toLocaleString()}</i></p>
