@@ -5,22 +5,25 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo '🚚 Đang lấy code từ GitHub...'
-                checkout scm 
+                checkout scm
             }
         }
 
         stage('Build & Test') {
             steps {
                 echo '🛠️ Đang cài đặt thư viện và kiểm tra code...'
-                sh 'npm install' 
+                // Mở khóa lệnh npm install để Jenkins thực sự kiểm tra code
+                sh 'npm install'
             }
         }
 
-        stage('Deploy to Render') {
+        stage('Docker Build & Push') {
             steps {
                 echo '🚀 Đang gọi Render để cập nhật bản build mới...'
-                // Dùng dấu nháy đôi bao ngoài và nháy đơn bao URL để tránh lỗi ký tự đặc biệt
-                sh "curl -X GET 'https://api.render.com/deploy/srv-xxxx?key=yyyy'" 
+                /* Thay URL dưới đây bằng Deploy Hook từ Render Dashboard 
+                   Settings -> Deploy Hook 
+                */
+                sh 'curl -X GET https://api.render.com/deploy/srv-xxxx?key=yyyy' [cite: 5]
             }
         }
     }
