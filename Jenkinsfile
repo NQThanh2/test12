@@ -24,7 +24,12 @@ pipeline {
                 // sh 'docker push your-docker-hub-id/jenkins-demo:latest'
             }
         }
-
+        stage('Build Docker Image') {
+    steps {
+        // Lệnh này để tạo ra Image từ Dockerfile của bạn
+        sh 'docker build -t my-web-app:v1 .'
+    }
+}
         stage('Deploy') {
             steps {
                 echo '🚀 Đang Deploy lên Server thực tế...'
