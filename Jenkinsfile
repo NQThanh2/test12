@@ -17,13 +17,13 @@ pipeline {
             }
         }
 
-        stage('Docker Build & Push') {
+        stage('Deploy to Render') {
             steps {
                 echo '🚀 Đang gọi Render để cập nhật bản build mới...'
                 /* Thay URL dưới đây bằng Deploy Hook từ Render Dashboard 
                    Settings -> Deploy Hook 
                 */
-                sh 'curl -X GET https://api.render.com/deploy/srv-xxxx?key=yyyy' [cite: 5]
+                sh "curl -X GET 'https://api.render.com/deploy/srv-xxxx?key=yyyy'" 
             }
         }
     }
