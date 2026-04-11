@@ -1,48 +1,39 @@
 pipeline {
     agent any
-
     stages {
         stage('Checkout') {
             steps {
                 echo '🚚 Đang lấy code mới nhất từ GitHub...'
-                checkout scm
+                checkout scm [cite: 3]
             }
         }
-
         stage('Build & Test') {
             steps {
                 echo '🛠️ Đang cài đặt thư viện Node.js...'
-                bat 'npm install'
+                // Dùng sh thay cho bat trên Linux
+                sh 'npm install' [cite: 4]
             }
         }
-
-        stage('Dockerize & Deploy Local') {
+        stage('Dockerize & Deploy') {
             steps {
                 echo '🐳 Bước 1: Đóng gói Docker Image...'
-                // Tạo một bản đóng gói (image) tên là doan-cnpm
-                bat 'docker build -t doan-cnpm .'
+                sh 'docker build -t doan-cnpm .' [cite: 5]
 
-                echo '🛑 Bước 2: Dọn dẹp Container cũ đang chạy...'
-                // Lệnh này giúp tránh lỗi "Port 3000 already in use" khi bạn build lần 2
-                bat 'docker stop web-app-demo || ver > nul'
-                bat 'docker rm web-app-demo || ver > nul'
+                echo '🛑 Bước 2: Dọn dẹp Container cũ...'
+                // Dùng || true để lệnh không bị lỗi nếu container chưa tồn tại
+                sh 'docker rm -f web-app-demo || true' [cite: 6, 7, 8]
 
-                echo '🚀 Bước 3: Khởi chạy ứng dụng trên localhost:3000...'
-                /* -d: chạy ngầm
-                   -p 3000:3000: ánh xạ cổng 3000 của máy vào cổng 3000 của Docker
-                   --name: đặt tên cho dễ quản lý
-                */
-                bat 'docker run -d --name web-app-demo -p 3000:3000 doan-cnpm'
+                echo '🚀 Bước 3: Khởi chạy ứng dụng...'
+                sh 'docker run -d --name web-app-demo -p 3000:3000 doan-cnpm' [cite: 9]
             }
         }
     }
-    
     post {
         success {
-            echo '✅ Xong! Bây giờ bạn có thể mở http://localhost:3000 để xem kết quả.'
+            echo '✅ Đã Deploy thành công!' [cite: 10, 11]
         }
         failure {
-            echo '❌ Có lỗi xảy ra trong quá trình Build hoặc Dockerize.'
+            echo '❌ Có lỗi xảy ra trong quá trình Build.' [cite: 12]
         }
     }
 }
