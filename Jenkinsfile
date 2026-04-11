@@ -5,40 +5,35 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo '🚚 Đang lấy code từ GitHub...'
-                checkout scm
+                checkout scm 
             }
         }
 
         stage('Build & Test') {
             steps {
                 echo '🛠️ Đang cài đặt thư viện và kiểm tra code...'
-                // sh 'npm install'
-                // sh 'npm test' 
+                // Mở khóa lệnh npm install để Jenkins thực sự kiểm tra code
+                sh 'npm install'
             }
         }
 
-        stage('Docker Build & Push') {
+        stage('Deploy to Render') {
             steps {
-                echo '🐳 Đang đóng gói Docker Image...'
-                // sh 'docker build -t your-docker-hub-id/jenkins-demo:latest .'
-                // sh 'docker push your-docker-hub-id/jenkins-demo:latest'
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                echo '🚀 Đang Deploy lên Server thực tế...'
-                // sh 'docker-compose up -d'
+                echo '🚀 Đang gọi Render để cập nhật bản build mới...'
+                /* Thay URL dưới đây bằng Deploy Hook từ Render Dashboard 
+                   Settings -> Deploy Hook 
+                */
+                sh 'curl -X GET https://api.render.com/deploy/srv-xxxx?key=yyyy' [cite: 5]
             }
         }
     }
     
     post {
         success {
-            echo '✅ Chúc mừng! Pipeline chạy thành công.'
+            echo '✅ Chúc mừng! Pipeline chạy thành công.' 
         }
         failure {
-            echo '❌ Toang rồi! Kiểm tra lại code hoặc cấu hình Jenkins.'
+            echo '❌ Toang rồi! Kiểm tra lại code hoặc cấu hình Jenkins.' 
         }
     }
 }
